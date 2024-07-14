@@ -31,9 +31,13 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
+
         try {
-             $post = DB::table('posts')->insert($request->all());
-                return response()->json($post,201);
+            //en attendant que l'authentification soit ok
+            $data = $request->all();
+            $data['user_id'] = 1;
+            $post = DB::table('posts')->insert($data);
+            return response()->json($post,201);
         } catch (\Throwable $th) {
 
             return response()->json($th,500);
@@ -69,7 +73,7 @@ class PostController extends Controller
             $post = DB::table('posts')->find($id);
             return response()->json($post);
         } catch (\Throwable $th) {
-            
+
             return response()->json($th,500);
         }
     }

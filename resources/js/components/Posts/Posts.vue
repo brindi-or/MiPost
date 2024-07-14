@@ -1,9 +1,9 @@
 <template>
     <div>
         <h3>Liste des posts</h3>
-
+        <button type="submit">Create post</button>
         <ul>
-            <li v-for="post in posts" :key="post.id">{{ post.content }}</li>
+            <li class="posts" v-for="post in posts" :key="post.id">{{ post.content }}</li>
         </ul>
 
         <form @submit.prevent='createPost'>
@@ -24,7 +24,7 @@ export default {
             posts: [],
             newPost: {
                 title: "",
-                content: ""
+                content: "",
             }
         }
     },
@@ -34,9 +34,17 @@ export default {
                 this.posts = response.data;
             });
         },
+
+        /**
+         * Send a POST request to '/api/posts' with newPost data, then handle the response by adding the new post to the posts array and resetting the newPost object.
+         *
+         * @return {void}
+         */
         createPost() {
             axios.post('/api/posts', this.newPost).then(response => {
-                this.posts.push(response.data);
+
+                // this.posts.push(response.data);
+                this.getPosts()
                 this.newPost = {
                     title: "",
                     content: ""
@@ -52,3 +60,18 @@ export default {
 
 }
 </script>
+
+<style>
+.posts{
+        padding: 20px;
+            list-style: none;
+            border: 1px solid grey;
+            background-color: transparent;
+            border-radius: 10px;
+}
+
+ul{
+        gap: 10px;
+        display: grid;
+}
+</style>
