@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,7 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts= DB::table('posts')->get();
+        $posts = Post::with('user', 'comments')->get();
         return response()->json($posts);
     }
 
