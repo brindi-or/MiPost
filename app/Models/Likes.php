@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Likes extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['user_id'];
+
+    public function Posts(){
+        return $this->belongsTo(Post::class, 'post_id');
+    }
 }

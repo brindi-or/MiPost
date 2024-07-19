@@ -14,7 +14,12 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts = Post::with('user', 'comments')->get();
+        $posts = Post::with('user', 'comments','likes')->get();
+        foreach ($posts as $post){
+            $likes = $post->likes();
+            $post->likes_count = $likes!=null ? $likes->count() : 0;
+        }
+// dd($posts);
         return response()->json($posts);
     }
 

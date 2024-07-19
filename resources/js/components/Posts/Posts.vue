@@ -6,6 +6,7 @@
     <article v-for="post in posts" :key="post.id" class="post">
       <h2>{{ post.title }}</h2>
       <p>{{ post.content }}</p>
+      <button @click="likePost(post.id)">({{ post.likes_count ?? 0 }})</button>
       <comments-list :comments="post.comments"></comments-list>
     </article>
 
@@ -44,6 +45,7 @@ export default {
     return {
       showModal: false,
       posts: [],
+      likesCount: 0,
       newPost: {
         title: "",
         content: "",
@@ -53,11 +55,11 @@ export default {
   methods: {
     getPosts() {
       axios.get("/api/posts").then((response) => {
-        console.log(response.data);
+        console.log("yo", response.data);
         this.posts = response.data;
+        this.listenForUpdates();
       });
     },
-
     /**
      * Send a POST request to '/api/posts' with newPost data, then handle the response by adding the new post to the posts array and resetting the newPost object.
      *
@@ -79,9 +81,30 @@ export default {
           console.log(error);
         });
     },
+    listenForUpdates() {
+      console.log("testi", this.posts, "listenForUpdates");
+      Object.keys(this.posts).forEach((post) => {
+        Echo.channel(`post.${post.id}`).listen("NewLike", (e) => {
+          // Update likes count for the specific publication
+          console.log("test", this.post);
+          this.$set(this.post[post.id], "likes_count", e.likesCount);
+        });
+      });
+    },
+    async likePost(id) {
+      try {
+        await axios.post(`api/post/${id}/like`).then((response) => {
+          console.log("in", this.posts, this.posts[id]);
+          this.posts[id].likes_count = response.data.likes_count;
+        });
+      } catch (error) {
+        console.log(error, "error");
+      }
+    },
   },
   mounted() {
     this.getPosts();
+    this.listenForUpdates();
   },
 };
 </script>
