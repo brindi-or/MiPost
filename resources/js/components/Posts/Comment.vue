@@ -4,8 +4,7 @@
     <h3>Commentaires</h3>
     <ul>
       <li v-for="comment in comments" :key="comment.id">
-        <strong>{{ comment.author }}</strong
-        >: {{ comment.body }}
+        <strong>{{ comment.author }}</strong> {{ comment.body }}
       </li>
     </ul>
   </div>
@@ -29,7 +28,7 @@ h3 {
   color: #3498db;
   border-bottom: 2px solid #3498db;
   padding-bottom: 0.5rem;
-  font-size: 1.4rem;
+  font-size: 12px;
 }
 
 ul {
@@ -40,8 +39,8 @@ ul {
 li {
   background-color: #ecf0f1;
   border-radius: 4px;
-  padding: 0.8rem;
   margin-bottom: 0.5rem;
+  font-size: 11px;
 }
 
 strong {

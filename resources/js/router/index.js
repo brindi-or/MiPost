@@ -1,34 +1,43 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import store from '../store';
+import { createRouter, createWebHistory } from 'vue-router'
+import {useAuthStore} from '../store';
 
-Vue.use(VueRouter);
+
 
 const routes = [
     {
-        path: '/login',
-        component: () => import('../components/Login.vue'),
+        path: '/api/app/login',
+        component: () => import('../components/auth/Login.vue'),
     },
     {
-        path: '/home',
+        path: '/',
         component: () => import('../components/Home.vue'),
         meta: { requiresAuth: true },
     },
     {
-            path: '/register',
-        component: () => import('../components/Register.vue'),
+        path: '/api/register',
+        component: () => import('../components/auth/Register.vue'),
+    },
+        {
+            path: '/api/app/profil',
+        component: () => import('../components/Profil/UserProfile.vue'),
     }
 ];
 
-const router = new VueRouter({
-    mode: 'history',
-    routes,
+const router = createRouter({
+  history: createWebHistory(),
+  routes
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth) && !store.state.isAuthenticated) {
-        next('/login');
+    // const token = useAuthStore.$state.token;
+    // const isAuthenticated = useAuthStore.$state.isAuthenticated;
+    const authStore = useAuthStore()
+    console.log('out', authStore.isAuthenticated)
+    if (to.matched.some(record => record.meta.requiresAuth) && !authStore.isAuthenticated) {
+        console.log('test')
+        next('/api/app/login');
     } else {
+        console.log('testno')
         next();
     }
 });

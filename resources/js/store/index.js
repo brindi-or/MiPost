@@ -1,42 +1,52 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
 
-Vue.use(Vuex);
+import { defineStore } from 'pinia'
+import axios from 'axios'
 
-export default new Vuex.Store({
-    state: {
-        user: null,
-        isAuthenticated: false,
+export  const useAuthStore = defineStore('auth', {
+    state: () => ({
+
+    token: localStorage.getItem('user-token') || '',
+    status: '',
+    user: {}
+  }),
+
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+    authStatus: (state) => state.status
+  },
+
+  actions: {
+      async login(user) {
+          console.log('log in');
+      this.status = 'loading'
+      try {
+        const response = await axios.post('/api/login', user)
+        const token = response.data.token
+        const userData = response.data.user
+        localStorage.setItem('user-token', token)
+        axios.defaults.headers.common['Authorization'] = token
+        this.token = token
+        this.status = 'success'
+        this.user = userData
+        return response
+      } catch (error) {
+        this.status = 'error'
+        this.token = ''
+        this.user = {}
+        localStorage.removeItem('user-token')
+        delete axios.defaults.headers.common['Authorization']
+        throw error
+      }
     },
-    mutations: {
-        SET_USER(state, user) {
-            state.user = user;
-            state.isAuthenticated = !!user;
-        },
-    },
-    actions: {
-        async login({ commit }, credentials) {
-            await axios.get('/sanctum/csrf-cookie');
-            const response = await axios.post('api/login', credentials);
-            commit('SET_USER', response.data.user);
-        },
-        async logout({ commit }) {
-            await axios.post('/logout');
-            commit('SET_USER', null);
-        },
-        async getUser({ commit }) {
-            try {
-                const response = await axios.get('/api/user');
-                commit('SET_USER', response.data);
-            } catch (error) {
-                commit('SET_USER', null);
-            }
-        },
-        async register({ commit }, userData) {
-        await axios.get('/sanctum/csrf-cookie');
-        const response = await axios.post('/register', userData);
-        commit('SET_USER', response.data.user);
-    },
-    },
-});
+
+    logout() {
+      localStorage.removeItem('user-token')
+      delete axios.defaults.headers.common['Authorization']
+      this.token = ''
+      this.status = ''
+      this.user = {}
+    }
+  }
+})
+
+

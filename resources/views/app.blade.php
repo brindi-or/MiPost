@@ -5,12 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Post</title>
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 </head>
 <body>
     <div id="app">
-        
+
     </div>
 
-    @vite('resources/js/app.js')
+
 </body>
 </html>

@@ -15,11 +15,15 @@
         "vue-template-compiler": "^2.7.16"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.6.0",
+        "@fortawesome/free-solid-svg-icons": "^6.6.0",
+        "@fortawesome/vue-fontawesome": "^3.0.8",
         "@vitejs/plugin-vue": "^5.0.5",
         "dotenv": "^16.4.5",
         "laravel-echo": "^1.16.1",
+        "pinia": "^2.1.7",
         "pusher-js": "^8.4.0-rc2",
         "vue": "^3.4.31",
-        "vue-router": "^4.0.13"
+        "vue-router": "^4.4.0"
     }
 }

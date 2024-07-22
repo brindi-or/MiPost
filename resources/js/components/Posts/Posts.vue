@@ -1,26 +1,25 @@
 <template>
-  <button @click="showModal = true" class="add-post-btn">Ajouter un article</button>
+  <button @click="showModal = true" class="add-post-btn">Add a post</button>
   <div class="post-list">
-    <h3>Liste des posts</h3>
-    <button type="submit">Create post</button>
-    <article v-for="post in posts" :key="post.id" class="post">
-      <h2>{{ post.title }}</h2>
-      <p>{{ post.content }}</p>
-      <button @click="likePost(post.id)">({{ post.likes_count ?? 0 }})</button>
-      <comments-list :comments="post.comments"></comments-list>
-    </article>
+    <h3 class="post-title">List of posts</h3>
+    <div class="post">
+      <article v-for="post in posts" :key="post.id" class="post">
+        <h4><button></button>{{ post.user.name }}</h4>
+        <div class="content">
+          <p>{{ post.content }}</p>
+          <button @click="likePost(post.id)">
+            <font-awesome-icon icon="thumbs-up" />
+            ({{ post.likes_count ?? 0 }})
+          </button>
+        </div>
 
-    <!-- <form @submit.prevent="createPost">
-      <input type="text" v-model="newPost.title" placeholder="Titre du post" />
-      <textarea
-        rows=""
-        cols=""
-        v-model="newPost.content"
-        placeholder="Contenu du post"
-      ></textarea>
+        <comments-list
+          :comments="post.comments"
+          v-if="post.comments.length != 0"
+        ></comments-list>
+      </article>
+    </div>
 
-      <button type="submit">Create post</button>
-    </form> -->
     <transition name="modal">
       <add-post-modal
         v-if="showModal"
@@ -36,6 +35,7 @@
 import CommentsList from "./Comment.vue";
 
 import AddPostModal from "./addPost.vue";
+
 export default {
   components: {
     CommentsList,
@@ -55,7 +55,7 @@ export default {
   methods: {
     getPosts() {
       axios.get("/api/posts").then((response) => {
-        console.log("yo", response.data);
+        console.log("Length of posts:", response.data[1].comments.length);
         this.posts = response.data;
         this.listenForUpdates();
       });
@@ -94,7 +94,10 @@ export default {
     async likePost(id) {
       try {
         await axios.post(`api/post/${id}/like`).then((response) => {
-          console.log("in", this.posts, this.posts[id]);
+          const post = this.posts.find((p) => p.id === id);
+          if (post) {
+            Object.assign(post, response.data);
+          }
           this.posts[id].likes_count = response.data.likes_count;
         });
       } catch (error) {
@@ -110,11 +113,17 @@ export default {
 </script>
 
 <style scoped>
+.content {
+  padding-left: 15px;
+}
+.post-title {
+  text-align: center;
+}
 .post {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
+  padding: 13px;
   margin-bottom: 2rem;
 }
 
@@ -148,7 +157,15 @@ export default {
 .add-post-btn:hover {
   background-color: #2980b9;
 }
-
+h4 {
+  display: flex;
+  align-items: center;
+}
+h4 button {
+  padding: 7px;
+  border-radius: 10px;
+  border-color: red;
+}
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.3s;

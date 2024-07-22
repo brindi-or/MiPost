@@ -1,7 +1,7 @@
 <!-- components/UserProfile.vue -->
 <template>
   <div class="user-profile">
-    <h2>Mon Profil</h2>
+    <h2>My Profil</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="name">Nom:</label>
@@ -15,26 +15,43 @@
         <label for="bio">Bio:</label>
         <textarea v-model="editedUser.bio" id="bio"></textarea>
       </div>
-      <button type="submit" class="submit-btn">Mettre à jour le profil</button>
+      <button type="submit" class="submit-btn">Update profil</button>
     </form>
   </div>
 </template>
 
 <script>
+import { useAuthStore } from "../../store/index";
 export default {
   name: "UserProfile",
   props: {
     user: Object,
   },
+
   data() {
+    const authStore = useAuthStore();
+
+    const login = async (username, password) => {
+      try {
+        await authStore.login({ username, password });
+        // Rediriger vers le tableau de bord ou une autre page après la connexion
+      } catch (error) {
+        console.error("Échec de la connexion:", error);
+      }
+    };
     return {
       editedUser: { ...this.user },
+      login,
+      authStore,
     };
   },
   methods: {
     submitForm() {
       this.$emit("update", this.editedUser);
     },
+  },
+  mounted() {
+    console.log("pro component mounted");
   },
 };
 </script>

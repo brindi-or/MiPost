@@ -15,3 +15,8 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post("/post/{id}/like", [LikeController::class, 'store']);
+
+// Routes gérées par Vue.js
+Route::get('/app/{any?}', function () {
+    return view('app');
+})->where('any', '.*');

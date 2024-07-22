@@ -5,10 +5,10 @@
   <main>
     <Posts></Posts>
   </main>
-  <div id="app"></div>
   <footer>
     <p>&copy; 2024 Mon Blog. Tous droits réservés.</p>
   </footer>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -33,7 +33,7 @@ body {
 #app {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #f7efef;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 

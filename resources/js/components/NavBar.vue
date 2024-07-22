@@ -29,10 +29,10 @@ export default {
     return {
       isNavActive: false,
       links: [
-        { text: "Post", url: "#" },
+        { text: "Post", url: "/" },
         // { text: "About", url: "#" },
         // { text: "Services", url: "#" },
-        { text: "Profile", url: "#" },
+        { text: "Profile", url: "/api/app/profil" },
       ],
     };
   },

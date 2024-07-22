@@ -2,21 +2,19 @@
 <template>
   <div class="modal-backdrop">
     <div class="modal">
-      <h2>Ajouter un nouvel article</h2>
+      <h2>Add a post</h2>
       <form @submit.prevent="submitForm">
         <div class="form-group">
-          <label for="title">Titre:</label>
+          <label for="title">Title:</label>
           <input v-model="newPost.title" id="title" required />
         </div>
         <div class="form-group">
-          <label for="content">Contenu:</label>
+          <label for="content">Content:</label>
           <textarea v-model="newPost.content" id="content" required></textarea>
         </div>
         <div class="button-group">
-          <button type="submit" class="submit-btn">Ajouter</button>
-          <button type="button" @click="$emit('close')" class="cancel-btn">
-            Annuler
-          </button>
+          <button type="submit" class="submit-btn">Add</button>
+          <button type="button" @click="$emit('close')" class="cancel-btn">Cancel</button>
         </div>
       </form>
     </div>
