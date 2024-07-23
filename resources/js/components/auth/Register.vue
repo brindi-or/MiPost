@@ -24,10 +24,6 @@
       />
     </div>
     <button type="submit" :disable="authStore.loading">Register</button>
-
-    <!-- <button type="button" @click="setDefaultName">SEt Default</button> -->
-
-    <!-- <h1>Name: {{ name }}</h1> -->
   </form>
   <p>
     Already have an account <button><a href="/api/app/login">Connect now</a></button>
@@ -48,10 +44,6 @@ const password_confirmation = ref("");
 
 const authStore = useAuthStore();
 
-function setDefaultName() {
-  name.value = "Hiro";
-  email.value = "hirodiscount@gmail.com";
-}
 function register() {
   authStore.register(
     name.value,
