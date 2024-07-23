@@ -7,7 +7,9 @@ export  const useAuthStore = defineStore('auth', {
 
     token: localStorage.getItem('user-token') || '',
     status: '',
-    user: {}
+    user: {},
+    loading: false,
+    error: ''
   }),
 
   getters: {
@@ -16,19 +18,28 @@ export  const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-      async login(user) {
-          console.log('log in');
-      this.status = 'loading'
-      try {
-        const response = await axios.post('/api/login', user)
-        const token = response.data.token
-        const userData = response.data.user
+      async login({email, password}) {
+        try{
+          // Obtenir le CSRF token
+        await axios.get("/sanctum/csrf-cookie");
+
+        // Faire la requête de connexion
+        const response = await axios.post("/api/login", {
+          email,
+          password,
+        });
+
+        const token = response.data.token;
+
+        //On persiste le token
         localStorage.setItem('user-token', token)
-        axios.defaults.headers.common['Authorization'] = token
+
+        //On ajoute le token au store
         this.token = token
-        this.status = 'success'
-        this.user = userData
-        return response
+        this.status = 'Success'
+        // this.user
+
+        console.log(token)
       } catch (error) {
         this.status = 'error'
         this.token = ''
@@ -39,6 +50,30 @@ export  const useAuthStore = defineStore('auth', {
       }
     },
 
+     async register(name,
+              email,
+              password,
+         password_confirmation)
+     {
+         try {
+          this.loading =true;
+            const response = await axios.post('/api/register', {
+              name,
+              email,
+              password,
+              password_confirmation
+            })
+
+            console.log(response);
+
+         } catch (error) {
+             console.log(error);
+             this.error = error;
+         } finally {
+            this.loading  = false;
+         }
+
+      },
     logout() {
       localStorage.removeItem('user-token')
       delete axios.defaults.headers.common['Authorization']

@@ -17,5 +17,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    // This helps fix the problem with host issue
+    server: {
+        hmr: {
+            host: 'localhost',
+        },
+      }
 });
 

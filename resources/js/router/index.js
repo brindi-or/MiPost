@@ -14,7 +14,7 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
-        path: '/api/register',
+        path: '/api/app/register',
         component: () => import('../components/auth/Register.vue'),
     },
         {

@@ -7,7 +7,11 @@
 </template>
 
 <script>
-import axios from "axios";
+import { useAuthStore } from "../../store/index";
+import { mapStores } from "pinia";
+//Options , Composition
+//Options est vieux et le plus populaire
+//Composition est recent et le plus robust
 
 export default {
   data() {
@@ -19,26 +23,20 @@ export default {
   methods: {
     async login() {
       try {
-        // Obtenir le CSRF token
-        await axios.get("/sanctum/csrf-cookie");
-
-        // Faire la requête de connexion
-        const response = await axios.post("/api/login", {
-          email: this.email,
-          password: this.password,
-        });
-
-        const token = response.data.token;
-
+        this.authStore.login({ email: this.email, password: this.password });
         // Stockez le token et redirigez l'utilisateur ici
         // this.$store.commit("setToken", token);
-        // this.$router.push("/dashboard");
-
-        console.log("Connexion réussie", token);
+        this.$router.push("/");
       } catch (error) {
         console.error("Échec de la connexion", error.response?.data || error.message);
       }
     },
+  },
+
+  computed: {
+    // note we are not passing an array, just one store after the other
+    // each store will be accessible as its id + 'Store'
+    ...mapStores(useAuthStore),
   },
 };
 </script>

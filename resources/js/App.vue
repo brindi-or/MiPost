@@ -1,22 +1,13 @@
 <template>
-  <header>
-    <NavBar />
-  </header>
-  <main>
-    <Posts></Posts>
-  </main>
+  <router-view></router-view>
   <footer>
     <p>&copy; 2024 Mon Blog. Tous droits réservés.</p>
   </footer>
-  <router-view></router-view>
 </template>
 
 <script>
-import Posts from "./components/Posts/Posts.vue";
-import NavBar from "./components/NavBar.vue";
 export default {
   name: "App",
-  components: { Posts, NavBar },
 };
 </script>
 
@@ -35,22 +26,6 @@ body {
   margin: 0 auto;
   background-color: #f7efef;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-header {
-  background-color: #3498db;
-  color: #fff;
-  text-align: center;
-  padding: 1rem;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 2rem;
-}
-
-main {
-  padding: 2rem;
 }
 
 footer {
