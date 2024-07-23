@@ -29,6 +29,9 @@
 
     <!-- <h1>Name: {{ name }}</h1> -->
   </form>
+  <p>
+    Already have an account <button><a href="/api/app/login">Connect now</a></button>
+  </p>
 </template>
 
 <script setup>
@@ -56,5 +59,15 @@ function register() {
     password.value,
     password_confirmation.value
   );
+  this.$router.push("/");
 }
 </script>
+<style>
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4%;
+  align-items: center;
+}
+</style>

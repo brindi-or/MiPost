@@ -26,6 +26,7 @@ body {
   margin: 0 auto;
   background-color: #f7efef;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: -webkit-fill-available;
 }
 
 footer {
@@ -34,8 +35,9 @@ footer {
   text-align: center;
   padding: 1rem;
   font-size: 0.9rem;
+  position: relative;
+  bottom: 0%;
 }
-
 @media (max-width: 768px) {
   #app {
     width: 100%;

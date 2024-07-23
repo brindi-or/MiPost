@@ -1,9 +1,19 @@
 <template>
   <form @submit.prevent="login">
-    <input v-model="email" type="email" required />
-    <input v-model="password" type="password" required />
+    <div>
+      <label for="email">Email:</label>
+      <input v-model="email" type="email" required />
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input v-model="password" type="password" required />
+    </div>
     <button type="submit">Login</button>
   </form>
+
+  <p>
+    Don't have an account <button><a href="/api/app/register">Register</a></button>
+  </p>
 </template>
 
 <script>
@@ -40,3 +50,12 @@ export default {
   },
 };
 </script>
+<style>
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4%;
+  align-items: center;
+}
+</style>

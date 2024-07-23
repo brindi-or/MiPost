@@ -31,10 +31,10 @@ export default {
   data() {
     const authStore = useAuthStore();
 
-    const login = async (username, password) => {
+    const login = async (email, password) => {
       try {
-        await authStore.login({ username, password });
-        // Rediriger vers le tableau de bord ou une autre page après la connexion
+        await authStore.login({ email, password });
+        // Rediriger vers unee page après la connexion
       } catch (error) {
         console.error("Échec de la connexion:", error);
       }
