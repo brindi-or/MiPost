@@ -33,7 +33,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "../../store/index";
-
+import { useRouter } from "vue-router";
 //Migrer de options API vers Composition API
 
 // Remplacement the data()
@@ -41,7 +41,7 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 const password_confirmation = ref("");
-
+const router = useRouter();
 const authStore = useAuthStore();
 
 function register() {
@@ -51,7 +51,8 @@ function register() {
     password.value,
     password_confirmation.value
   );
-  this.$router.push("/");
+  // If using Vue 3 Composition API
+  router.push("/");
 }
 </script>
 <style>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 window.axios = axios;
 
 //for listenning ot laravel event
@@ -14,6 +15,13 @@ window.Echo = new Echo({
     forceTLS: true
 });
 
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.withCredentials = true;
+
+window.axios.interceptors.request.use(config => {
+    const token = Cookies.get('XSRF-TOKEN');
+    if (token) {
+        config.headers['X-XSRF-TOKEN'] = token;
+    }
+    return config;
+});

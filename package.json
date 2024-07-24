@@ -20,6 +20,7 @@
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@vitejs/plugin-vue": "^5.0.5",
         "dotenv": "^16.4.5",
+        "js-cookie": "^3.0.5",
         "laravel-echo": "^1.16.1",
         "pinia": "^2.1.7",
         "pusher-js": "^8.4.0-rc2",

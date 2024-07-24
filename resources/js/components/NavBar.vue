@@ -1,19 +1,36 @@
 <template>
-  <nav class="navbar">
-    <div class="navbar-container">
-      <div class="logo">
+  <nav class="bg-gradient-to-r from-purple-600 to-indigo-700 p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center navbar-container">
+      <div class="flex items-center">
         <img
-          class="image"
+          class="w-10 h-10 rounded-full image"
           src="https://image.shutterstock.com/image-vector/dotted-spiral-vortex-royaltyfree-images-600w-2227567913.jpg"
-          alt=""
+          alt="Logo"
         />
+        <span class="ml-2 text-white text-xl font-bold">YourApp</span>
       </div>
-      <ul :class="['nav-links', { 'nav-active': isNavActive }]">
-        <li v-for="(link, index) in links" :key="index" :style="getLinkStyle(index)">
-          <a :href="link.url">{{ link.text }}</a>
+      <ul
+        :class="[
+          'flex transition-all duration-300 ease-in-out nav-links',
+          { 'nav-active': isNavActive },
+        ]"
+      >
+        <li
+          v-for="(link, index) in links"
+          :key="index"
+          :style="getLinkStyle(index)"
+          class="mx-4"
+        >
+          <a
+            :href="link.url"
+            @click="link.text === 'Logout' ? handleLogout($event) : null"
+            class="text-white hover:text-indigo-200 transition duration-300"
+          >
+            {{ link.text }}
+          </a>
         </li>
       </ul>
-      <div class="burger" @click="toggleNav" :class="{ toggle: isNavActive }">
+      <div class="burger lg:hidden" @click="toggleNav" :class="{ toggle: isNavActive }">
         <div class="line1"></div>
         <div class="line2"></div>
         <div class="line3"></div>
@@ -22,33 +39,41 @@
   </nav>
 </template>
 
-<script>
-export default {
-  name: "Navbar",
-  data() {
+<script setup>
+import { ref } from "vue";
+import { useAuthStore } from "./../store/index";
+import { useRouter } from "vue-router";
+import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
+
+const isNavActive = ref(false);
+const authStore = useAuthStore();
+const router = useRouter();
+
+const links = ref([
+  { text: "Post", url: "/" },
+  { text: "Profile", url: "/api/app/profil" },
+  { text: "Logout", url: "#" },
+]);
+
+const toggleNav = () => {
+  isNavActive.value = !isNavActive.value;
+};
+
+const getLinkStyle = (index) => {
+  if (isNavActive.value) {
     return {
-      isNavActive: false,
-      links: [
-        { text: "Post", url: "/" },
-        // { text: "About", url: "#" },
-        // { text: "Services", url: "#" },
-        { text: "Profile", url: "/api/app/profil" },
-      ],
+      animation: `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`,
     };
-  },
-  methods: {
-    toggleNav() {
-      this.isNavActive = !this.isNavActive;
-    },
-    getLinkStyle(index) {
-      if (this.isNavActive) {
-        return {
-          animation: `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`,
-        };
-      }
-      return {};
-    },
-  },
+  }
+  return {};
+};
+
+const handleLogout = async (event) => {
+  event.preventDefault();
+  console.log("remie");
+
+  authStore.logout();
+  router.push("/api/app/login");
 };
 </script>
 
@@ -62,9 +87,11 @@ export default {
 body {
   font-family: Arial, sans-serif;
 }
+
 .image {
-  width: 45px;
+  width: 25px;
 }
+
 .navbar {
   /* background-color: #333; */
   padding: 1rem;
@@ -151,6 +178,7 @@ body {
     opacity: 0;
     transform: translateX(50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0px);

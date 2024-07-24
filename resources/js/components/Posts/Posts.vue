@@ -33,7 +33,7 @@
 
 <script>
 import CommentsList from "./Comment.vue";
-
+import { useAuthStore } from "../../store";
 import AddPostModal from "./addPost.vue";
 
 export default {
@@ -53,7 +53,8 @@ export default {
     };
   },
   methods: {
-    getPosts() {
+    async getPosts() {
+      await axios.get("/sanctum/csrf-cookie");
       axios.get("/api/posts").then((response) => {
         console.log("Length of posts:", response.data[1].comments.length);
         this.posts = response.data;
@@ -65,11 +66,14 @@ export default {
      *
      * @return {void}
      */
-    addPost() {
+    async addPost() {
+      const authStore = useAuthStore();
+      let user = authStore.user.id;
+      await axios.get("/sanctum/csrf-cookie");
       axios
-        .post("/api/posts", this.newPost)
+        .post(`/api/posts/${user}`, this.newPost)
         .then((response) => {
-          // this.posts.push(response.data);
+          // this.posts.push(respnse.data);
           this.getPosts();
           this.newPost = {
             title: "",
@@ -92,8 +96,12 @@ export default {
       });
     },
     async likePost(id) {
+      const authStore = useAuthStore();
+      let user = authStore.user.id;
+      console.log("user", user, authStore);
       try {
-        await axios.post(`api/post/${id}/like`).then((response) => {
+        await axios.get("/sanctum/csrf-cookie");
+        await axios.post(`api/post/${id}/${user}`).then((response) => {
           const post = this.posts.find((p) => p.id === id);
           if (post) {
             Object.assign(post, response.data);

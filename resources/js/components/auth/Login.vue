@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="login">
+  <form class="login" @submit.prevent="login">
     <div>
       <label for="email">Email:</label>
       <input v-model="email" type="email" required />
@@ -16,42 +16,34 @@
   </p>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import { useAuthStore } from "../../store/index";
-import { mapStores } from "pinia";
+import { useRouter } from "vue-router";
+
 //Options , Composition
 //Options est vieux et le plus populaire
 //Composition est recent et le plus robust
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
-  methods: {
-    async login() {
-      try {
-        this.authStore.login({ email: this.email, password: this.password });
-        // Stockez le token et redirigez l'utilisateur ici
-        // this.$store.commit("setToken", token);
-        this.$router.push("/");
-      } catch (error) {
-        console.error("Échec de la connexion", error.response?.data || error.message);
-      }
-    },
-  },
+const email = ref("");
 
-  computed: {
-    // note we are not passing an array, just one store after the other
-    // each store will be accessible as its id + 'Store'
-    ...mapStores(useAuthStore),
-  },
-};
+const router = useRouter();
+const authStore = useAuthStore();
+const password = ref("");
+
+function login() {
+  console.log(email, password);
+  try {
+    const res = authStore.login({ email: email.value, password: password.value });
+    console.log(res);
+    router.push("/");
+  } catch (error) {
+    console.log("error occured during login", error);
+  }
+}
 </script>
 <style>
-form {
+form.login {
   display: flex;
   flex-direction: column;
   gap: 10px;

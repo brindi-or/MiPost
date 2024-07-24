@@ -14,12 +14,11 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts = Post::with('user', 'comments','likes')->get();
+        $posts = Post::with('user', 'comments','likes')->orderBy('id','desc')->get();
         foreach ($posts as $post){
             $likes = $post->likes();
             $post->likes_count = $likes!=null ? $likes->count() : 0;
         }
-// dd($posts);
         return response()->json($posts);
     }
 
@@ -34,18 +33,17 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,$user)
     {
         //
 
         try {
             //en attendant que l'authentification soit ok
             $data = $request->all();
-            $data['user_id'] = 1;
+            $data['user_id'] = $user;
             $post = DB::table('posts')->insert($data);
             return response()->json($post,201);
         } catch (\Throwable $th) {
-
             return response()->json($th,500);
         }
 

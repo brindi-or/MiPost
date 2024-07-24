@@ -5,21 +5,21 @@ namespace App\Http\Controllers;
 use App\Events\NewLike;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 class LikeController extends Controller
 {
     //
-    public function store(Request $request, $post_id)
+    public function store(Request $request, $post_id,$user_id)
     {
         $post = Post::findOrFail($post_id);
-
-
         //on vérifie si l'utilisateur a déjà aimé le post
-        $existingLike = $post->likes()->where('user_id',2)->first();
+        // dd($request, $post_id, $user_id);
+        $existingLike = $post->likes()->where('user_id', $user_id)->first();
 
         if(!$existingLike){
-            $post->likes()->create(['user_id' =>2]);
+            $post->likes()->create(['user_id' => $user_id]);
         }
         else{
             $existingLike->delete();

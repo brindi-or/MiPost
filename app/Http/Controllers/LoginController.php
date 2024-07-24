@@ -11,6 +11,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -23,7 +24,9 @@ class LoginController extends Controller
         // If the authentication fails, it returns `false` and the `if` condition will be evaluated to `false`.
         if (Auth::attempt($credentials)) {
             $token = $request->user()->createToken('auth-token')->plainTextToken;
-            return response()->json(['token' => $token]);
+            // dd(auth()->user(), Auth::user(), $request);
+            $user = Auth::user();
+            return response()->json(['token' => $token,'user' =>$user]);
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
