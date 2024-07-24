@@ -96,19 +96,26 @@ export default {
       });
     },
     async likePost(id) {
+      const post = this.posts.find((p) => p.id === id);
       const authStore = useAuthStore();
       let user = authStore.user.id;
+      const like_post = post.likes.find((p) => p.user_id === user);
+
+      console.log("test,", post, id, "yes", like_post);
+
+      post.likes_count = !like_post ? post.likes_count + 1 : post.likes_count;
+
       console.log("user", user, authStore);
       try {
         await axios.get("/sanctum/csrf-cookie");
         await axios.post(`api/post/${id}/${user}`).then((response) => {
-          const post = this.posts.find((p) => p.id === id);
           if (post) {
             Object.assign(post, response.data);
           }
-          this.posts[id].likes_count = response.data.likes_count;
+          post.likes_count = response.data.likes_count;
         });
       } catch (error) {
+        post.likes_count = post.likes_count != 0 ? post.likes_count - 1 : 0;
         console.log(error, "error");
       }
     },
