@@ -1,8 +1,5 @@
 <template>
   <router-view></router-view>
-  <footer>
-    <p>&copy; 2024 Mon Blog. Tous droits réservés.</p>
-  </footer>
 </template>
 
 <script>
@@ -24,9 +21,12 @@ body {
 #app {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #f7efef;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* background-color: #f7efef;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
   min-height: -webkit-fill-available;
+  padding-left: 10%;
+  padding-right: 10%;
+  overflow: auto;
 }
 
 footer {
@@ -51,10 +51,5 @@ footer {
   header h1 {
     font-size: 1.5rem;
   }
-}
-#app {
-  padding-left: 10%;
-  padding-right: 10%;
-  overflow: auto;
 }
 </style>

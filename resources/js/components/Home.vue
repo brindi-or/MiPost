@@ -5,6 +5,9 @@
   <main>
     <Posts></Posts>
   </main>
+  <footer>
+    <p>&copy; 2024 Mon Blog. Tous droits réservés.</p>
+  </footer>
 </template>
 
 <script>
